@@ -30,19 +30,20 @@ _Para el ingreso del login y obtener el token se debe utilizar la siguiente url:
 ## Ejecución de las pruebas ⚙️
 Ya que se ha logrado obtener el token lo ingresamos en http://localhost:8080/swagger-ui/ como se visualiza en la siguiente figura:
 
-![foto 3](https://user-images.githubusercontent.com/43796299/205544050-49e05589-8f5b-4e4a-b502-b4ff8dc6ac8c.PNG)
+![foto3](https://user-images.githubusercontent.com/43796299/205742109-2fb884e9-59a2-4498-8c10-73d50598ab9d.PNG)
 
 
 ## Swagger UI ⌨️
 A continuación ya se puede hacer uso de la Api Documentation de swagger:
 
-![foto 1](https://user-images.githubusercontent.com/43796299/205543832-2557ee93-0030-4ccf-a356-c5f7c33ad53f.PNG)
+![foto1](https://user-images.githubusercontent.com/43796299/205742025-0a16ce3b-cc72-4df5-8550-f9c98f140434.PNG)
 
 
 ### Pruebas de Funcionamiento  📄
 Al ejecutar el método para obtener todos los empleados se nos muestra la información que se tiene de la base y esta funcionando correctamente:
 
 ![foto 2](https://user-images.githubusercontent.com/43796299/205543779-89eef2f4-00db-42b0-a29e-7195c448a6d7.PNG)
+
 
 
 
