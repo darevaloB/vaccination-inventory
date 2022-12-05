@@ -26,22 +26,21 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-    
-    /*@Value("${vaccination.secret}")
-    String secret;*/
+
+   // private Algorithm algorithm;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("metodo: {}", request.getMethod());
+     
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
         if (authorizationHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        
+
         String token = authorizationHeader.substring("Bearer ".length());
-        Algorithm algorithm = Algorithm.HMAC256("6E02397890B2A07534A6072A4868CA44".getBytes());
+        Algorithm algorithm = Algorithm.HMAC256("DAAB533".getBytes());
         try {
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(token);
@@ -56,8 +55,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            response.setHeader("error", e.getMessage());
             response.sendError(FORBIDDEN.value());
 
         }

@@ -5,10 +5,12 @@
  */
 package com.kruger.vaccination.controller;
 
-import com.kruger.vaccination.dto.CreateEmployeeRQ;
-import com.kruger.vaccination.dto.EmployeeUpdateRQ;
+import com.kruger.vaccination.dto.CreateEmployeeRequest;
+import com.kruger.vaccination.dto.EmployeeUpdateRequest;
 import com.kruger.vaccination.model.Employee;
+import com.kruger.vaccination.model.RecordVaccination;
 import com.kruger.vaccination.service.EmployeeService;
+import com.kruger.vaccination.service.RecordVaccinationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,6 +40,9 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private RecordVaccinationService recordVaccinationService;
 
     @GetMapping
     @ApiOperation(value = "Get all employees")
@@ -57,7 +63,7 @@ public class EmployeeController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Ok, when you create the employee"),
         @ApiResponse(code = 400, message = "Bad Request, could not create the employee")})
-    public ResponseEntity createEmployee(@RequestBody @Valid CreateEmployeeRQ employeeCreateRQ) {
+    public ResponseEntity createEmployee(@RequestBody @Valid CreateEmployeeRequest employeeCreateRQ) {
         try {
             return ResponseEntity.ok(this.employeeService.createEmployee(employeeCreateRQ));
         } catch (Exception e) {
@@ -85,7 +91,7 @@ public class EmployeeController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Ok, the employee has been modified "),
         @ApiResponse(code = 400, message = "Bad Request")})
-    public ResponseEntity updateEmployee(@RequestBody EmployeeUpdateRQ employeeUpdateRQ, @PathVariable String identification) {
+    public ResponseEntity updateEmployee(@RequestBody EmployeeUpdateRequest employeeUpdateRQ, @PathVariable String identification) {
         try {
             this.employeeService.updateEmployeeInfoByIdentification(employeeUpdateRQ, identification);
             return ResponseEntity.ok().build();
@@ -108,5 +114,48 @@ public class EmployeeController {
         }
     }
 
-}
+    @GetMapping(value = "/status/{vaccinationStatus}")
+    @ApiOperation(value = "Obtain records by vaccination status")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Ok "),
+        @ApiResponse(code = 400, message = "Bad Request")})
+    public ResponseEntity getEmployeesByVaccinationStatus(@PathVariable boolean vaccinationStatus) {
+        try {
+            List<Employee> employees = this.employeeService.getEmployeesByStateVaccination(vaccinationStatus);
+            return ResponseEntity.ok(employees);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
+    @GetMapping(value = "/dates")
+    @ApiOperation(value = "Obtain records by date")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Ok"),
+        @ApiResponse(code = 400, message = "Bad Request")})
+    public ResponseEntity findEmployeesByVaccinationDates(@RequestParam(name = "startDate") String startDate,
+            @RequestParam(name = "endDate") String endDate) {
+        try {
+            List<RecordVaccination> recordsVaccination = this.recordVaccinationService.findByDateBetween(startDate, endDate);
+            return ResponseEntity.ok(recordsVaccination);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/type/{typeVaccineName}")
+    @ApiOperation(value = "Obtain records by type of vaccine")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Ok"),
+        @ApiResponse(code = 400, message = "Bad Request")})
+    public ResponseEntity findEmployeesByVaccineType(@PathVariable String typeVaccineName) {
+        try {
+            List<RecordVaccination> recordsVaccination = this.recordVaccinationService.findByTypeVaccineName(typeVaccineName);
+            return ResponseEntity.ok(recordsVaccination);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+}

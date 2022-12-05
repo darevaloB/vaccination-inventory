@@ -40,19 +40,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         "/swagger-ui/*",
         "/swagger-ui/index.html",
         "/v2/api-docs",
-        "/webjars/**",
-        "*",
-        "**",};
+        };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter customAuthenticationFilter = new JwtAuthenticationFilter(authenticationManagerBean());
-        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/login");
 
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/api/login").permitAll()
+                .authorizeRequests().antMatchers("/login").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.GET, "/api/employee/**").hasAnyAuthority(Roles.ADMIN.toString())
                 .and()
@@ -61,8 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(HttpMethod.PUT, "/api/employee/**").hasAnyAuthority(Roles.ADMIN.toString(), Roles.EMPLOYEE.toString())
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/employee/**").hasAnyAuthority(Roles.ADMIN.toString())
-                .and()
-                .authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority(Roles.ADMIN.toString())
                 .and()
                 .authorizeRequests().antMatchers(WHITELIST).permitAll()
                 .and()

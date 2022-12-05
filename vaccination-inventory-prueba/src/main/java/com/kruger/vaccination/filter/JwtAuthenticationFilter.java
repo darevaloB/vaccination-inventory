@@ -46,8 +46,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        log.info("Usuario: {} y pass: {}",username,password);
-        log.info("request: {}",request);
         
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return this.authenticationManager.authenticate(authenticationToken);
@@ -56,7 +54,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("6E02397890B2A07534A6072A4868CA44".getBytes());
+        Algorithm algorithm = Algorithm.HMAC256("DAAB533".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30*60*1000))

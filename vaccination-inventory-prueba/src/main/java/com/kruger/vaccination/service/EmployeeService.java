@@ -9,10 +9,10 @@ import com.kruger.vaccination.dao.EmployeeRepository;
 import com.kruger.vaccination.dao.RecordVaccinationRepository;
 import com.kruger.vaccination.dao.TypeVaccineRepository;
 import com.kruger.vaccination.dao.UserRepository;
-import com.kruger.vaccination.dto.CreateEmployeeRQ;
-import com.kruger.vaccination.dto.CredentialsRS;
-import com.kruger.vaccination.dto.EmployeeUpdateRQ;
-import com.kruger.vaccination.dto.RecordVaccinationRQ;
+import com.kruger.vaccination.dto.CreateEmployeeRequest;
+import com.kruger.vaccination.dto.LoginResponse;
+import com.kruger.vaccination.dto.EmployeeUpdateRequest;
+import com.kruger.vaccination.dto.RecordVaccinationRequest;
 import com.kruger.vaccination.model.Employee;
 import com.kruger.vaccination.model.RecordVaccination;
 import com.kruger.vaccination.model.Roles;
@@ -62,7 +62,7 @@ public class EmployeeService {
         return this.employeeRepository.findByVaccinationStatus(status);
     }
 
-    public CredentialsRS createEmployee(CreateEmployeeRQ createEmployeeRQ) throws Exception {
+    public LoginResponse createEmployee(CreateEmployeeRequest createEmployeeRQ) throws Exception {
         if (this.employeeRepository.existsByIdentification(createEmployeeRQ.getIdentification())) {
             throw new Exception("Employee already exists");
         }
@@ -95,13 +95,13 @@ public class EmployeeService {
         this.userRepository.save(user);
 
         user.setPassword(password);
-        CredentialsRS credentialsRS = new CredentialsRS();
+        LoginResponse credentialsRS = new LoginResponse();
         credentialsRS.setPassword(user.getPassword());
         credentialsRS.setUsername(user.getUsername());
         return credentialsRS;
     }
 
-    public void updateEmployeeInfoByIdentification(EmployeeUpdateRQ employeeUpdateRQ, String identificacion) throws Exception {
+    public void updateEmployeeInfoByIdentification(EmployeeUpdateRequest employeeUpdateRQ, String identificacion) throws Exception {
 
         if (!this.employeeRepository.existsByIdentification(identificacion)) {
             throw new Exception("Employee not found");
@@ -124,7 +124,7 @@ public class EmployeeService {
         this.employeeRepository.save(employee);
 
         if (employeeUpdateRQ.getVaccinationStatus()) {
-            for (RecordVaccinationRQ recordVaccinationRQ : employeeUpdateRQ.getRecordVaccinationRQ()) {
+            for (RecordVaccinationRequest recordVaccinationRQ : employeeUpdateRQ.getRecordVaccinationRQ()) {
                 RecordVaccination recordVaccination = new RecordVaccination();
                 recordVaccination.setDate(recordVaccinationRQ.getDate());
                 recordVaccination.setEmployee(employee);
