@@ -24,8 +24,8 @@ $ cd target/ $ java -jar vaccination-inventory-1.jar
 ## Inicio 🚀
 _Para el ingreso del login y obtener el token se debe utilizar la siguiente url:_
 
-* http://localhost:8080/api/login?username=[usuario]&password=[contraseña]
-* Por ejemplo: http://localhost:8080/api/login?username=admin123&password=rooti123
+* http://localhost:8080/login?username=[usuario]&password=[contraseña]
+* Por ejemplo: http://localhost:8080/login?username=admin&password=admin1997
 
 ## Ejecución de las pruebas ⚙️
 Ya que se ha logrado obtener el token lo ingresamos en http://localhost:8080/swagger-ui/ como se visualiza en la siguiente figura:
