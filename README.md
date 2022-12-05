@@ -1,5 +1,5 @@
 # vaccination-inventory
-_El proyecto detalla una aplicación para llevar un registro del inventario del estado de vacunación de los empleados._
+_El proyecto detalla una aplicación para llevar un registro del inventario del estado de vacunación de los empleados de una empresa._
 
 ### Pre-requisitos 📋
 El presente proyecto esta creado en Java 11 utilizando la version 2.7.4 de Spring Boot
